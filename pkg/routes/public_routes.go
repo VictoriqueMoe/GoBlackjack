@@ -11,4 +11,8 @@ func PublicRoutes(s controllers.Service, app *fiber.App) {
 	for _, pRoute := range routes {
 		pRoute(router)
 	}
+
+	router.Get("/foo", func(c *fiber.Ctx) error {
+		return c.SendString("bar")
+	})
 }

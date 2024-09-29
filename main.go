@@ -17,18 +17,6 @@ import (
 	_ "github.com/joho/godotenv/autoload" // load .env file automatically
 )
 
-// @title API
-// @version 1.0
-// @description This is an auto-generated API Docs.
-// @termsOfService http://swagger.io/terms/
-// @contact.name API Support
-// @contact.email your@mail.com
-// @license.name Apache 2.0
-// @license.url http://www.apache.org/licenses/LICENSE-2.0.html
-// @BasePath /api
-// @securityDefinitions.apikey ApiKeyAuth
-// @in header
-// @name Authorization
 func main() {
 	// Define Fiber config.
 	config := configs.FiberConfig()
@@ -36,11 +24,13 @@ func main() {
 	// Define a new Fiber app with config.
 	app := fiber.New(config)
 
+	// services
 	gameService, err := game.NewService()
 	if err != nil {
 		panic("an error occurred initialising the the game service")
 	}
 	service := controllers.NewService(gameService)
+
 	// Middlewares.
 	middleware.FiberMiddleware(app) // Register Fiber's middleware for app.
 

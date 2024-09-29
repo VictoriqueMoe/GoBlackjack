@@ -6,18 +6,18 @@ import (
 )
 
 type Service struct {
-	game.Service
+	MainGameService game.MainGameService
 }
 
-func NewService(local game.Service) *Service {
+func NewService(gameService game.MainGameService) *Service {
 	return &Service{
-		Service: local,
+		MainGameService: gameService,
 	}
 }
 
 func (s *Service) GetAllRoutes() []models.FSetupRoute {
 	all := []models.FSetupRoute{}
-	all = append(all, s.getAllBookRoutes()...)
+	all = append(all, s.getAllGameRoutes()...)
 
 	return all
 }

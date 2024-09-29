@@ -1,12 +1,12 @@
 package models
 
 type Game struct {
-	Device      string      `gorm:"type:TEXT;primary_key;unique"`
-	Status      PlayStatus  `gorm:"type:TEXT"`
-	StartedOn   int64       `gorm:"type:integer"`
-	Deck        StringArray `gorm:"type:TEXT;serializer:json"`
-	DealerCards StringArray `gorm:"type:TEXT;serializer:json"`
-	PlayerCards StringArray `gorm:"type:TEXT;serializer:json"`
+	Device      string     `gorm:"type:TEXT;primary_key;unique"`
+	Status      PlayStatus `gorm:"type:TEXT"`
+	StartedOn   int64      `gorm:"type:integer"`
+	Deck        []string   `gorm:"type:TEXT;serializer:json"`
+	DealerCards []string   `gorm:"type:TEXT;serializer:json"`
+	PlayerCards []string   `gorm:"type:TEXT;serializer:json"`
 }
 
 func NewGame(

@@ -9,23 +9,15 @@ const docTemplate = `{
     "info": {
         "description": "{{escape .Description}}",
         "title": "{{.Title}}",
-        "termsOfService": "http://swagger.io/terms/",
-        "contact": {
-            "name": "API Support",
-            "email": "your@mail.com"
-        },
-        "license": {
-            "name": "Apache 2.0",
-            "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
-        },
+        "contact": {},
         "version": "{{.Version}}"
     },
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
-        "/v1/deal": {
+        "/api/v1/deal": {
             "get": {
-                "description": "Start a new game or deal an existing one.",
+                "description": "Start a new game or deal for an existing one.",
                 "consumes": [
                     "application/json"
                 ],
@@ -42,12 +34,83 @@ const docTemplate = `{
                         "schema": {
                             "$ref": "#/definitions/models.ResponseMsg"
                         }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/models.ErrorMsg"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/hit": {
+            "get": {
+                "description": "Draw a new card from the dealer",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Game"
+                ],
+                "summary": "hit move",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.ResponseMsg"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/models.ErrorMsg"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/models.ErrorMsg"
+                        }
                     }
                 }
             }
         }
     },
     "definitions": {
+        "models.ErrorMsg": {
+            "type": "object",
+            "properties": {
+                "message": {
+                    "type": "string"
+                },
+                "status": {
+                    "type": "integer"
+                }
+            }
+        },
+        "models.PlayStatus": {
+            "type": "string",
+            "enum": [
+                "Dealer Bust",
+                "Player Wins",
+                "Dealer Wins",
+                "Draw",
+                "Playing",
+                "Bust"
+            ],
+            "x-enum-varnames": [
+                "DealerBust",
+                "PlayerWins",
+                "DealerWins",
+                "Draw",
+                "Playing",
+                "Bust"
+            ]
+        },
         "models.ResponseMsg": {
             "type": "object",
             "properties": {
@@ -66,35 +129,28 @@ const docTemplate = `{
                 "dealerValue": {
                     "type": "integer"
                 },
+                "device": {
+                    "type": "string"
+                },
                 "handValue": {
                     "type": "integer"
                 },
                 "status": {
-                    "type": "string"
-                },
-                "token": {
-                    "type": "string"
+                    "$ref": "#/definitions/models.PlayStatus"
                 }
             }
-        }
-    },
-    "securityDefinitions": {
-        "ApiKeyAuth": {
-            "type": "apiKey",
-            "name": "Authorization",
-            "in": "header"
         }
     }
 }`
 
 // SwaggerInfo holds exported Swagger Info so clients can modify it
 var SwaggerInfo = &swag.Spec{
-	Version:          "1.0",
+	Version:          "",
 	Host:             "",
-	BasePath:         "/api",
+	BasePath:         "",
 	Schemes:          []string{},
-	Title:            "API",
-	Description:      "This is an auto-generated API Docs.",
+	Title:            "",
+	Description:      "",
 	InfoInstanceName: "swagger",
 	SwaggerTemplate:  docTemplate,
 	LeftDelim:        "{{",

@@ -8,4 +8,5 @@ const (
 	DealerWins PlayStatus = "Dealer Wins"
 	Draw       PlayStatus = "Draw"
 	Playing    PlayStatus = "Playing"
+	Bust       PlayStatus = "Bust"
 )

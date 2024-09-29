@@ -5,7 +5,7 @@ import "github.com/gofiber/fiber/v2"
 // NotFoundRoute func for describe 404 Error route.
 func NotFoundRoute(a *fiber.App) {
 	// Register new special route.
-	a.Use(
+	/*a.Use(
 		// Anonymous function.
 		func(c *fiber.Ctx) error {
 			// Return HTTP 404 status and JSON response.
@@ -14,5 +14,5 @@ func NotFoundRoute(a *fiber.App) {
 				"msg":   "sorry, endpoint is not found",
 			})
 		},
-	)
+	)*/
 }

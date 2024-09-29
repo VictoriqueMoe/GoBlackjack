@@ -1,5 +1,27 @@
-basePath: /api
 definitions:
+  models.ErrorMsg:
+    properties:
+      message:
+        type: string
+      status:
+        type: integer
+    type: object
+  models.PlayStatus:
+    enum:
+    - Dealer Bust
+    - Player Wins
+    - Dealer Wins
+    - Draw
+    - Playing
+    - Bust
+    type: string
+    x-enum-varnames:
+    - DealerBust
+    - PlayerWins
+    - DealerWins
+    - Draw
+    - Playing
+    - Bust
   models.ResponseMsg:
     properties:
       cards:
@@ -12,30 +34,21 @@ definitions:
         type: array
       dealerValue:
         type: integer
+      device:
+        type: string
       handValue:
         type: integer
       status:
-        type: string
-      token:
-        type: string
+        $ref: '#/definitions/models.PlayStatus'
     type: object
 info:
-  contact:
-    email: your@mail.com
-    name: API Support
-  description: This is an auto-generated API Docs.
-  license:
-    name: Apache 2.0
-    url: http://www.apache.org/licenses/LICENSE-2.0.html
-  termsOfService: http://swagger.io/terms/
-  title: API
-  version: "1.0"
+  contact: {}
 paths:
-  /v1/deal:
+  /api/v1/deal:
     get:
       consumes:
       - application/json
-      description: Start a new game or deal an existing one.
+      description: Start a new game or deal for an existing one.
       produces:
       - application/json
       responses:
@@ -43,12 +56,34 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/models.ResponseMsg'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.ErrorMsg'
       summary: start game
       tags:
       - Game
-securityDefinitions:
-  ApiKeyAuth:
-    in: header
-    name: Authorization
-    type: apiKey
+  /api/v1/hit:
+    get:
+      consumes:
+      - application/json
+      description: Draw a new card from the dealer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.ResponseMsg'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.ErrorMsg'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.ErrorMsg'
+      summary: hit move
+      tags:
+      - Game
 swagger: "2.0"

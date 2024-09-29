@@ -9,6 +9,7 @@ import (
 
 type Dao interface {
 	GameDao
+	StatDao
 }
 
 type dao struct {
