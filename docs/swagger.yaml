@@ -1,0 +1,54 @@
+basePath: /api
+definitions:
+  models.ResponseMsg:
+    properties:
+      cards:
+        items:
+          type: string
+        type: array
+      dealerCards:
+        items:
+          type: string
+        type: array
+      dealerValue:
+        type: integer
+      handValue:
+        type: integer
+      status:
+        type: string
+      token:
+        type: string
+    type: object
+info:
+  contact:
+    email: your@mail.com
+    name: API Support
+  description: This is an auto-generated API Docs.
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  termsOfService: http://swagger.io/terms/
+  title: API
+  version: "1.0"
+paths:
+  /v1/deal:
+    get:
+      consumes:
+      - application/json
+      description: Start a new game or deal an existing one.
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.ResponseMsg'
+      summary: start game
+      tags:
+      - Game
+securityDefinitions:
+  ApiKeyAuth:
+    in: header
+    name: Authorization
+    type: apiKey
+swagger: "2.0"
