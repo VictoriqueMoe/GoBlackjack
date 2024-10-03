@@ -2,7 +2,7 @@ package main
 
 import (
 	"github.com/create-go-app/fiber-go-template/app/controllers"
-	"github.com/create-go-app/fiber-go-template/app/game"
+	"github.com/create-go-app/fiber-go-template/app/dao"
 	"os"
 
 	"github.com/create-go-app/fiber-go-template/pkg/configs"
@@ -24,12 +24,14 @@ func main() {
 	// Define a new Fiber app with config.
 	app := fiber.New(config)
 
-	// services
-	gameService, err := game.NewService()
+	// dao
+	mainDao, err := dao.NewDao()
 	if err != nil {
-		panic("an error occurred initialising the the game service")
+		panic(err)
 	}
-	service := controllers.NewService(gameService)
+
+	// services
+	service := controllers.NewService(mainDao)
 
 	// Middlewares.
 	middleware.FiberMiddleware(app) // Register Fiber's middleware for app.

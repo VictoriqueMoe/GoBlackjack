@@ -2,9 +2,11 @@ package models
 
 import (
 	"github.com/gofiber/fiber/v2/log"
+	"github.com/google/uuid"
 )
 
 type ResponseMsg struct {
+	Token       uuid.UUID  `json:"token"`
 	Device      string     `json:"device"`
 	Cards       []string   `json:"cards"`
 	DealerCards []string   `json:"dealerCards"`
@@ -36,6 +38,7 @@ func NewErrorMsg(msg string, err error, status int) *ErrorMsg {
 }
 
 func NewResponseMsg(
+	token uuid.UUID,
 	device string,
 	cards []string,
 	dealerCards []string,
@@ -44,6 +47,7 @@ func NewResponseMsg(
 	status PlayStatus,
 ) *ResponseMsg {
 	return &ResponseMsg{
+		Token:       token,
 		Device:      device,
 		Cards:       cards,
 		DealerCards: dealerCards,

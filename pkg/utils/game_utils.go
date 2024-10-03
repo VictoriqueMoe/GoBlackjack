@@ -5,8 +5,6 @@ import (
 	"encoding/hex"
 )
 
-var h = sha256.New()
-
 func DeviceHash(ip, ua string) string {
 	h := sha256.New()
 	h.Write([]byte(ip + ua))

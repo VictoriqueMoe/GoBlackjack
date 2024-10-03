@@ -45,9 +45,11 @@ type MainGameService interface {
 	CalculateScore(cards []string) int
 	Deal(game *models.Game)
 	Hit(game *models.Game) error
-	Stay(game *models.Game)
+	Stay(game *models.Game) (playerValue int, dealerValue int, err error)
 	CreateDeck(game *models.Game)
-	GetGame(deviceId string, active bool) (*models.Game, error)
+	GetActiveGame(deviceId string) (*models.Game, error)
+	GetGameFromToken(deviceId string) (*models.Game, error)
+	GetAllGames(deviceId string) ([]models.Game, error)
 }
 
 type service struct {
@@ -55,26 +57,26 @@ type service struct {
 	statService stats.StatService
 }
 
-func NewService() (MainGameService, error) {
-	daoService, err := dao.NewDao()
-	if err != nil {
-		return nil, err
-	}
-	statService, err := stats.NewService(daoService)
-	if err != nil {
-		return nil, err
-	}
+func NewService(
+	statService stats.StatService,
+	dao dao.Dao,
+) (MainGameService, error) {
 	return &service{
-		dao:         daoService,
+		dao:         dao,
 		statService: statService,
 	}, nil
 }
 
-func (s *service) GetGame(deviceId string, active bool) (*models.Game, error) {
-	if active {
-		return s.dao.RetrieveActiveGame(deviceId)
-	}
-	return s.dao.RetrieveGame(deviceId)
+func (s *service) GetAllGames(deviceId string) ([]models.Game, error) {
+	return s.dao.GetAllGames(deviceId)
+}
+
+func (s *service) GetGameFromToken(token string) (*models.Game, error) {
+	return s.dao.RetrieveGame(token)
+}
+
+func (s *service) GetActiveGame(deviceId string) (*models.Game, error) {
+	return s.dao.RetrieveActiveGame(deviceId)
 }
 
 func (s *service) NewGame(deviceId string) (models.Game, error) {
@@ -102,10 +104,33 @@ func (s *service) CreateDeck(game *models.Game) {
 	}
 }
 
-func (s *service) Stay(game *models.Game) {
-	for s.CalculateScore(game.PlayerCards) < 17 {
+func (s *service) Stay(game *models.Game) (playerValue int, dealerValue int, err error) {
+	for s.CalculateScore(game.DealerCards) < 17 {
 		game.DealerCards = append(game.DealerCards, utils.Pop(&game.Deck))
 	}
+	playerValue = s.CalculateScore(game.PlayerCards)
+	dealerValue = s.CalculateScore(game.DealerCards)
+
+	if dealerValue > 21 {
+		game.Status = models.DealerBust
+		log.Info("DEALER BUST")
+		_, err = s.statService.UpdateStats(game.Device, stats.Win)
+	} else if playerValue > dealerValue {
+		game.Status = models.PlayerWins
+		log.Info("WIN")
+		_, err = s.statService.UpdateStats(game.Device, stats.Win)
+	} else if dealerValue > playerValue {
+		game.Status = models.DealerWins
+		log.Info("LOSE")
+		_, err = s.statService.UpdateStats(game.Device, stats.Loss)
+	} else {
+		game.Status = models.Draw
+		log.Info("DRAW")
+		_, err = s.statService.UpdateStats(game.Device, stats.Draw)
+	}
+
+	_, err = s.dao.SaveOrUpdateGame(*game)
+	return
 }
 
 func (s *service) Hit(game *models.Game) error {

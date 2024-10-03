@@ -40,6 +40,17 @@ definitions:
         type: integer
       status:
         $ref: '#/definitions/models.PlayStatus'
+      token:
+        type: string
+    type: object
+  models.StatusMsg:
+    properties:
+      draws:
+        type: integer
+      loses:
+        type: integer
+      wins:
+        type: integer
     type: object
 info:
   contact: {}
@@ -63,11 +74,41 @@ paths:
       summary: start game
       tags:
       - Game
+  /api/v1/history:
+    get:
+      consumes:
+      - application/json
+      description: Get all the games you played
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.StatusMsg'
+            type: array
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/models.ErrorMsg'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.ErrorMsg'
+      summary: get all games played
+      tags:
+      - Game
   /api/v1/hit:
     get:
       consumes:
       - application/json
       description: Draw a new card from the dealer
+      parameters:
+      - description: token id for a game
+        in: query
+        name: token
+        type: string
       produces:
       - application/json
       responses:
@@ -84,6 +125,59 @@ paths:
           schema:
             $ref: '#/definitions/models.ErrorMsg'
       summary: hit move
+      tags:
+      - Game
+  /api/v1/stats:
+    get:
+      consumes:
+      - application/json
+      description: Get player stats of wins, loses and draws
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.ResponseMsg'
+            type: array
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/models.ErrorMsg'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.ErrorMsg'
+      summary: Get player stats of wins, loses and draws
+      tags:
+      - Game
+  /api/v1/stay:
+    get:
+      consumes:
+      - application/json
+      description: Stop drawing cards and allow dealer to draw cards
+      parameters:
+      - description: token id for a game
+        in: query
+        name: token
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.ResponseMsg'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.ErrorMsg'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.ErrorMsg'
+      summary: Stop drawing cards and allow dealer to draw cards
       tags:
       - Game
 swagger: "2.0"

@@ -1,7 +1,10 @@
 package models
 
+import "github.com/google/uuid"
+
 type Game struct {
-	Device      string     `gorm:"type:TEXT;primary_key;unique"`
+	Token       uuid.UUID  `gorm:"type:TEXT;primary_key;unique"`
+	Device      string     `gorm:"type:TEXT"`
 	Status      PlayStatus `gorm:"type:TEXT"`
 	StartedOn   int64      `gorm:"type:integer"`
 	Deck        []string   `gorm:"type:TEXT;serializer:json"`
@@ -15,6 +18,7 @@ func NewGame(
 	startedOn int64,
 ) *Game {
 	return newGame(
+		uuid.New(),
 		device,
 		status,
 		startedOn,
@@ -25,6 +29,7 @@ func NewGame(
 }
 
 func newGame(
+	token uuid.UUID,
 	device string,
 	status PlayStatus,
 	startedOn int64,
@@ -33,6 +38,7 @@ func newGame(
 	playerCards []string,
 ) *Game {
 	return &Game{
+		Token:       token,
 		Device:      device,
 		Status:      status,
 		StartedOn:   startedOn,

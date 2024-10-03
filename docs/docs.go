@@ -44,6 +44,44 @@ const docTemplate = `{
                 }
             }
         },
+        "/api/v1/history": {
+            "get": {
+                "description": "Get all the games you played",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Game"
+                ],
+                "summary": "get all games played",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.StatusMsg"
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/models.ErrorMsg"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/models.ErrorMsg"
+                        }
+                    }
+                }
+            }
+        },
         "/api/v1/hit": {
             "get": {
                 "description": "Draw a new card from the dealer",
@@ -57,6 +95,95 @@ const docTemplate = `{
                     "Game"
                 ],
                 "summary": "hit move",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "token id for a game",
+                        "name": "token",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.ResponseMsg"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/models.ErrorMsg"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/models.ErrorMsg"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/stats": {
+            "get": {
+                "description": "Get player stats of wins, loses and draws",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Game"
+                ],
+                "summary": "Get player stats of wins, loses and draws",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.ResponseMsg"
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/models.ErrorMsg"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/models.ErrorMsg"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/stay": {
+            "get": {
+                "description": "Stop drawing cards and allow dealer to draw cards",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Game"
+                ],
+                "summary": "Stop drawing cards and allow dealer to draw cards",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "token id for a game",
+                        "name": "token",
+                        "in": "query"
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -137,6 +264,23 @@ const docTemplate = `{
                 },
                 "status": {
                     "$ref": "#/definitions/models.PlayStatus"
+                },
+                "token": {
+                    "type": "string"
+                }
+            }
+        },
+        "models.StatusMsg": {
+            "type": "object",
+            "properties": {
+                "draws": {
+                    "type": "integer"
+                },
+                "loses": {
+                    "type": "integer"
+                },
+                "wins": {
+                    "type": "integer"
                 }
             }
         }

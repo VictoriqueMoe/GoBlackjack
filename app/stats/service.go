@@ -7,6 +7,7 @@ import (
 
 type StatService interface {
 	UpdateStats(deviceId string, action Action) (*models.Stat, error)
+	GetStats(deviceId string) (*models.Stat, error)
 }
 
 type statService struct {
@@ -17,6 +18,10 @@ func NewService(daoService dao.Dao) (StatService, error) {
 	return &statService{
 		daoService,
 	}, nil
+}
+
+func (s *statService) GetStats(deviceId string) (*models.Stat, error) {
+	return s.dao.GetStat(deviceId)
 }
 
 func (s *statService) UpdateStats(deviceId string, action Action) (*models.Stat, error) {
