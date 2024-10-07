@@ -21,7 +21,10 @@ func (d dao) SaveOrUpdateGame(game models.Game, tx ...*gorm.DB) (models.Game, er
 
 func (d dao) GetAllGames(deviceId string, tx ...*gorm.DB) ([]models.Game, error) {
 	var games []models.Game
-	err := d.getDb(tx...).Where("device = ?", deviceId).Find(&games).Error
+	err := d.getDb(tx...).
+		Where("device = ?", deviceId).
+		Not("Status = ?", models.Playing).
+		Find(&games).Error
 	return games, err
 }
 
