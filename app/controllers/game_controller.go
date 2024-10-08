@@ -31,20 +31,6 @@ func (s *Service) setupHistoryRoute(routeGroup fiber.Router) {
 	routeGroup.Get("/history", s.history)
 }
 
-// setupStatRoute.
-// @Description Get player stats of wins, loses and draws
-// @Summary Get player stats of wins, loses and draws
-// @Tags Game
-// @Accept json
-// @Produce json
-// @Success 200 {object} []models.ResponseMsg
-// @Success 500 {object} models.ErrorMsg
-// @Success 404 {object} models.ErrorMsg
-// @Router /api/v1/stats [get]
-func (s *Service) setupStatRoute(routeGroup fiber.Router) {
-	routeGroup.Get("/stats", s.history)
-}
-
 func (s *Service) history(c *fiber.Ctx) error {
 	deviceId := getDeviceId(c)
 	games, err := s.MainGameService.GetAllGames(deviceId)
@@ -71,6 +57,20 @@ func (s *Service) history(c *fiber.Ctx) error {
 	}
 
 	return c.Status(fiber.StatusOK).JSON(resp)
+}
+
+// setupStatRoute.
+// @Description Get player stats of wins, loses and draws
+// @Summary Get player stats of wins, loses and draws
+// @Tags Game
+// @Accept json
+// @Produce json
+// @Success 200 {object} []models.ResponseMsg
+// @Success 500 {object} models.ErrorMsg
+// @Success 404 {object} models.ErrorMsg
+// @Router /api/v1/stats [get]
+func (s *Service) setupStatRoute(routeGroup fiber.Router) {
+	routeGroup.Get("/stats", s.stats)
 }
 
 func (s *Service) stats(c *fiber.Ctx) error {
