@@ -16,7 +16,7 @@ const docTemplate = `{
     "basePath": "{{.BasePath}}",
     "paths": {
         "/api/v1/deal": {
-            "get": {
+            "post": {
                 "description": "Start a new game or deal for an existing one.",
                 "consumes": [
                     "application/json"
@@ -83,7 +83,7 @@ const docTemplate = `{
             }
         },
         "/api/v1/hit": {
-            "get": {
+            "post": {
                 "description": "Draw a new card from the dealer",
                 "consumes": [
                     "application/json"
@@ -164,7 +164,7 @@ const docTemplate = `{
             }
         },
         "/api/v1/stay": {
-            "get": {
+            "post": {
                 "description": "Stop drawing cards and allow dealer to draw cards",
                 "consumes": [
                     "application/json"
