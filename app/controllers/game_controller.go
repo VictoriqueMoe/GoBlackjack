@@ -108,7 +108,7 @@ func (s *Service) stats(c *fiber.Ctx) error {
 // @Param	token	query	string	false	"token id for a game"
 // @Router /api/v1/stay [get]
 func (s *Service) setupStayRoute(routeGroup fiber.Router) {
-	routeGroup.Get("/stay", s.stay)
+	routeGroup.Post("/stay", s.stay)
 }
 
 func (s *Service) stay(c *fiber.Ctx) error {
@@ -173,7 +173,7 @@ func (s *Service) stay(c *fiber.Ctx) error {
 // @Param	token	query	string	false	"token id for a game"
 // @Router /api/v1/hit [get]
 func (s *Service) setupHitRoute(routeGroup fiber.Router) {
-	routeGroup.Get("/hit", s.hit)
+	routeGroup.Post("/hit", s.hit)
 }
 
 func (s *Service) hit(c *fiber.Ctx) error {
@@ -228,7 +228,7 @@ func (s *Service) hit(c *fiber.Ctx) error {
 // @Success 500 {object} models.ErrorMsg
 // @Router /api/v1/deal [get]
 func (s *Service) SetupDealRoute(routeGroup fiber.Router) {
-	routeGroup.Get("/deal", s.deal)
+	routeGroup.Post("/deal", s.deal)
 }
 
 func (s *Service) deal(c *fiber.Ctx) error {
