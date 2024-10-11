@@ -35,7 +35,7 @@ The returned data contains the players cards and the token to play the game.
 > **NOTE:** The device ID is a hash of the user agent and the client IP
 
 ```shell
-curl 'http://localhost:3000/deal'
+curl -X 'POST' 'http://localhost:3000/deal'
 ```
 ```json
 {
@@ -56,9 +56,9 @@ If the token is not specified then the device ID will be used instead to find th
 The returned data contains the players cards and the token to play the game.
 
 ```shell
-curl 'http://localhost:3000/hit?token=game-token-goes-here'
+curl -X 'POST' 'http://localhost:3000/hit?token=game-token-goes-here'
 
-curl 'http://localhost:3000/hit'
+curl -X 'POST' 'http://localhost:3000/hit'
 ```
 ```json
 {
@@ -81,9 +81,9 @@ The returned data contains the players and the dealers cards, their relative val
 However the game is over at this point and an new /deal call must be made to start a new game.
 
 ```shell
-curl 'http://localhost:3000/stay?token=game-token-goes-here'
+curl -X 'POST' 'http://localhost:3000/stay?token=game-token-goes-here'
 
-curl 'http://localhost:3000/stay'
+curl -X 'POST' 'http://localhost:3000/stay'
 ```
 ```json
 {
